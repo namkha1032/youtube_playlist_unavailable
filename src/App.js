@@ -22,7 +22,8 @@ import {
     MoonOutlined,
     SunOutlined,
     MoonFilled,
-    SunFilled
+    SunFilled,
+    ExportOutlined
 } from '@ant-design/icons';
 import Container from '@mui/material/Container';
 const { Header, Content, Footer } = Layout;
@@ -33,12 +34,15 @@ const App = () => {
     let [unAvail, setUnAvail] = useState([])
     let [loading, setLoading] = useState(false)
     let [modeTheme, setModeTheme] = useState("light")
+    let y = new Date().getFullYear()
+    console.log("y", y)
     async function fetchPlaylist(values) {
         setLoading(true)
         let flag = true
         let pageToken = null
         let myList = []
         let unAvailList = []
+
         let playlistResponse = await axios.get(`https://www.googleapis.com/youtube/v3/playlists?part=contentDetails,id,snippet,localizations,status&id=${values.playlistid}&key=${values.apikey}`)
         // let plImageResponse = await axios.get(`https://www.googleapis.com/youtube/v3/playlistImages?part=snippet&playlistId=${values.playlistid}&key=${values.apikey}`)
         console.log("playlistResponse", playlistResponse)
@@ -135,13 +139,15 @@ const App = () => {
                 }}
             >
                 {/* <Content> */}
-                <Container>
+                <Container style={{ height: "100%" }}>
                     <>
+
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
                             <Form form={form} name="horizontal_login" layout="inline" onFinish={fetchPlaylist}>
                                 <Form.Item
                                     name="playlistid"
+                                    label="Playlist ID"
                                     rules={[
                                         {
                                             required: true,
@@ -155,6 +161,7 @@ const App = () => {
                                 </Form.Item>
                                 <Form.Item
                                     name="apikey"
+                                    label="API key"
                                     rules={[
                                         {
                                             required: true,
@@ -192,9 +199,20 @@ const App = () => {
                                     }
                                 }} />
                         </div>
+                        {loading == true
+                            ?
+                            <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                {modeTheme == "dark"
+                                    ? <Image preview={false} width={"50%"} src="./youtube_playlist_unavailable/tetris_only_black.gif" />
+                                    : <Image preview={false} width={"50%"} src="./youtube_playlist_unavailable/zero_two.gif" />}
+
+
+                            </div>
+                            : null
+                        }
 
                         {
-                            unAvail?.length > 0 ?
+                            unAvail?.length > 0 && loading == false ?
                                 <>
                                     <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
                                         <Col span={24}>
@@ -208,7 +226,7 @@ const App = () => {
                                         </Col>
                                         {unAvail.map((ite, index) =>
                                             <Col span={24} key={index}>
-                                                <Card styles={{
+                                                <Card bordered styles={{
                                                     body: {
                                                         padding: 8
                                                     }
@@ -224,13 +242,17 @@ const App = () => {
                                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "100%" }}>
                                                                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                                                                     <Typography.Title copyable style={{ margin: 0 }} level={4}>{ite.snippet.title}</Typography.Title>
-                                                                    <Typography.Paragraph type="secondary" style={{ margin: 0 }}>{ite.snippet.videoOwnerChannelTitle}</Typography.Paragraph>
-                                                                    <Typography.Paragraph type="danger" style={{ margin: 0 }}>{ite.status.privacyStatus}</Typography.Paragraph>
+                                                                    <Typography.Paragraph style={{ margin: 0 }}>{ite.snippet.videoOwnerChannelTitle}</Typography.Paragraph>
+                                                                    <Typography.Paragraph type={ite.status.privacyStatus == "unlisted" ? "success" : "danger"} style={{ margin: 0 }}>{ite.status.privacyStatus}</Typography.Paragraph>
                                                                 </div>
-                                                                <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems:"flex-end" }}>
+                                                                <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end" }}>
                                                                     <Typography.Text copyable>{ite.contentDetails.videoId}</Typography.Text>
-                                                                    <Typography.Link copyable target="_blank" href={`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
-                                                                    <Typography.Link copyable target="_blank" href={`https://music.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://music.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
+                                                                    <Typography.Link copyable={{
+                                                                        icon: <ExportOutlined />
+                                                                    }} target="_blank" href={`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
+                                                                    <Typography.Link copyable={{
+                                                                        icon: <ExportOutlined />
+                                                                    }} target="_blank" href={`https://web.archive.org/web/${new Date().getFullYear()}*/https://youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://web.archive.org/web/${new Date().getFullYear()}*/https://youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
                                                                 </div>
                                                             </div>
                                                             {/* <div>
