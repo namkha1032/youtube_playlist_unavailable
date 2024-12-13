@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/youtube-playlist-unavailable/static/css/main.8e551cec.css",
+    "main.js": "/youtube-playlist-unavailable/static/js/main.37006785.js",
+    "index.html": "/youtube-playlist-unavailable/index.html",
+    "main.8e551cec.css.map": "/youtube-playlist-unavailable/static/css/main.8e551cec.css.map",
+    "main.37006785.js.map": "/youtube-playlist-unavailable/static/js/main.37006785.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8e551cec.css",
+    "static/js/main.37006785.js"
+  ]
+}
