@@ -1,7 +1,7 @@
 {
   "name": "youtube_playlist_unavailable",
   "version": "0.1.0",
-  "homepage": "https://namkha1032.github.io/youtube-playlist-unavailable",
+  "homepage": "https://namkha1032.github.io/youtube_playlist_unavailable",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
