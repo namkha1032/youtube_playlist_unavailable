@@ -203,8 +203,8 @@ const App = () => {
                             ?
                             <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 {modeTheme == "dark"
-                                    ? <Image preview={false} width={"50%"} src="./youtube_playlist_unavailable/tetris_only_black.gif" />
-                                    : <Image preview={false} width={"50%"} src="./youtube_playlist_unavailable/zero_two.gif" />}
+                                    ? <Image preview={false} width={"50%"} src="./tetris_only_black.gif" />
+                                    : <Image preview={false} width={"50%"} src="./zero_two.gif" />}
 
 
                             </div>
