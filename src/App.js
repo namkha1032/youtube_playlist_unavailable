@@ -218,7 +218,7 @@ const App = () => {
                                                             <Typography.Title style={{ margin: 0 }} level={4}>{ite.snippet.position}</Typography.Title>
                                                         </Col>
                                                         <Col span={3}>
-                                                            <Image src={ite.snippet.thumbnails.default.url} />
+                                                            <Image src={ite.snippet.thumbnails?.default?.url} />
                                                         </Col>
                                                         <Col span={19}>
                                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "100%" }}>
@@ -229,8 +229,8 @@ const App = () => {
                                                                 </div>
                                                                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems:"flex-end" }}>
                                                                     <Typography.Text copyable>{ite.contentDetails.videoId}</Typography.Text>
-                                                                    <Typography.Link target="_blank" href={`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
-                                                                    <Typography.Link target="_blank" href={`https://music.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://music.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
+                                                                    <Typography.Link copyable target="_blank" href={`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://www.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
+                                                                    <Typography.Link copyable target="_blank" href={`https://music.youtube.com/watch?v=${ite.contentDetails.videoId}`}>{`https://music.youtube.com/watch?v=${ite.contentDetails.videoId}`}</Typography.Link>
                                                                 </div>
                                                             </div>
                                                             {/* <div>
