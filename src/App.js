@@ -16,6 +16,8 @@ import {
     Form,
     Input,
     Descriptions,
+    Empty,
+    Alert,
     Divider
 } from "antd";
 import {
@@ -40,11 +42,16 @@ const App = () => {
         let pageToken = null
         let myList = []
         let unAvailList = []
-
-        let playlistResponse = await axios.get(`https://www.googleapis.com/youtube/v3/playlists?part=contentDetails,id,snippet,localizations,status&id=${values.playlistid}&key=${values.apikey}`)
+        let playlistResponse = null
+        playlistResponse = await axios.get(`https://www.googleapis.com/youtube/v3/playlists?part=contentDetails,id,snippet,localizations,status&id=${values.playlistid}&key=${values.apikey}`)
         // let plImageResponse = await axios.get(`https://www.googleapis.com/youtube/v3/playlistImages?part=snippet&playlistId=${values.playlistid}&key=${values.apikey}`)
         console.log("playlistResponse", playlistResponse)
-        // console.log("plImageResponse", plImageResponse)
+        if (playlistResponse.data.items.length == 0) {
+            flag = false
+            setUnAvail(unAvailList)
+            setPlayList(myList)
+            setPlayListInfo(0)
+        }
         while (flag) {
             try {
                 let URL = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,snippet,status&playlistId=${values.playlistid}&maxResults=1000&key=${values.apikey}`;
@@ -68,16 +75,14 @@ const App = () => {
                 }
             }
             catch (e) {
-                console.log("ERROR!", e)
                 flag = false
-                console.log(myList)
                 setUnAvail(unAvailList)
                 setPlayList(myList)
+                setPlayListInfo(playlistResponse.data.items[0])
             }
         }
-        setPlayListInfo(playlistResponse.data.items[0])
         setLoading(false)
-        // console.log(response.data)
+        console.log("myList", myList)
     }
     useEffect(() => {
         let modeThemeStorage = localStorage.getItem("modeTheme")
@@ -197,6 +202,11 @@ const App = () => {
                                     }
                                 }} />
                         </div>
+                        <Alert message={<>
+                            <Typography.Text>You can create your own Youtube API key </Typography.Text>
+                            <Typography.Link href="https://developers.google.com/youtube/v3/getting-started" target="_blank">here</Typography.Link>
+
+                        </>} type="info" showIcon style={{ width: "40%", marginTop: 16 }} />
                         {loading == true
                             ?
                             <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -210,21 +220,48 @@ const App = () => {
                         }
 
                         {
-                            unAvail?.length > 0 && loading == false ?
+                            playListInfo !== null && playListInfo !== 0 && loading == false ?
                                 <>
                                     <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
                                         <Col span={24}>
-                                            <Descriptions title="Playlist Info" items={items} size="small" column={3}
-                                                layout="vertical"
-                                                // contentStyle={{
-                                                //     justifyContent: "flex-start"
-                                                // }}
-                                                style={{ width: "80%" }}
-                                            />
+                                            <Card
+                                            // styles={{
+                                            //     body: {
+                                            //         padding: 24
+                                            //     }
+                                            // }}
+                                            >
+                                                <Descriptions title="Playlist Info" items={items} size="small" column={3}
+                                                    layout="vertical"
+                                                    // contentStyle={{
+                                                    //     justifyContent: "flex-start"
+                                                    // }}
+                                                    style={{ width: "80%" }}
+                                                />
+                                            </Card>
                                         </Col>
+                                        {unAvail.length > 0 ?
+                                            <Divider>Unavailable videos</Divider>
+                                            : null
+                                        }
+
+                                        {playListInfo && unAvail.length == 0
+                                            ? <Col span={24} style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                                                <Empty
+                                                    image={`${window.location.href}/u1f422_u1f422.png`}
+
+                                                    description={
+                                                        <Typography.Text>
+                                                            Your playlist has no unavailable videos
+                                                        </Typography.Text>
+                                                    }
+                                                >
+                                                </Empty>
+                                            </Col>
+                                            : null}
                                         {unAvail.map((ite, index) =>
                                             <Col span={24} key={index}>
-                                                <Card bordered styles={{
+                                                <Card styles={{
                                                     body: {
                                                         padding: 8
                                                     }
@@ -265,6 +302,24 @@ const App = () => {
                                     </Row>
                                 </>
                                 : null
+                        }
+                        {
+                            playListInfo == 0 && loading == false ?
+                                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                                    <Empty
+                                        style={{ margin: "auto" }}
+                                        image={`${window.location.href}/u1f60e_u1f422.png`}
+
+                                        description={
+                                            <Typography.Text>
+                                                Your playlist may not exist or be private
+                                            </Typography.Text>
+                                        }
+                                    >
+                                    </Empty>
+                                </div>
+                                : null
+
                         }
                     </>
                 </Container >
