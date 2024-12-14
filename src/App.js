@@ -34,8 +34,6 @@ const App = () => {
     let [unAvail, setUnAvail] = useState([])
     let [loading, setLoading] = useState(false)
     let [modeTheme, setModeTheme] = useState("light")
-    let y = new Date().getFullYear()
-    console.log("y", y)
     async function fetchPlaylist(values) {
         setLoading(true)
         let flag = true
@@ -203,8 +201,8 @@ const App = () => {
                             ?
                             <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 {modeTheme == "dark"
-                                    ? <Image preview={false} width={"50%"} src="./tetris_only_black.gif" />
-                                    : <Image preview={false} width={"50%"} src="./zero_two.gif" />}
+                                    ? <Image preview={false} width={"50%"} src={`${window.location.href}/tetris_only_black.gif`} />
+                                    : <Image preview={false} width={"50%"} src={`${window.location.href}/zero_two.gif`} />}
 
 
                             </div>
